@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Showtime Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h5 th:text="${lichChieu.phongChieu.tenPhong}"></h5>
+          <p th:text="'Phòng chiếu: ' + ${lichChieu.phongChieu.tenPhong}"></p>
+          <p th:text="'Ngày chiếu: ' + ${lichChieu.ngayChieu}"></p>
+          <p th:text="'Thời gian chiếu: ' + ${#dates.format(lichChieu.thoiGianBatDau, 'HH:mm')} + ' - ' + ${#dates.format(lichChieu.thoiGianKetThuc ,'HH:mm')}"></p>
+        </div>
+        <div class="card-body">
+          <h6>Danh sách vé phim</h6>
+          <form id="bookingForm" th:action="@{/order}" method="post">
+            <div class="list-group">
+              <div th:each="ticket : ${lichChieu.veXemPhims}" class="list-group-item">
+                <input type="checkbox" class="ticket-checkbox" name="selectedTickets" th:value="${ticket.id}" data-price="${ticket.giaTien}" th:disabled="${ticket.trangThai == 1}">
+                <p>ID vé: <span th:text="${ticket.id}"></span></p>
+                <p>Vị trí ghế: <span th:text="${ticket.viTri}"></span></p>
+                <p>Giá tiền: <span th:text="${ticket.giaTien}"></span></p>
+              </div>
+          </div>
+            <p id="totalPrice"></p>
+            <button type="submit" class="btn btn-primary mt-3">Thanh toán</button>
+          </form>
+          <hr>
+          <a href="/" class="btn btn-outline-secondary">Quay lại</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var checkboxes = document.querySelectorAll('.ticket-checkbox');
+    var totalPriceDisplay = document.getElementById('totalPrice');
+
+    checkboxes.forEach(function (checkbox) {
+      checkbox.addEventListener('change', function () {
+        var totalPrice = 0;
+        checkboxes.forEach(function (checkbox) {
+          if (checkbox.checked) {
+            totalPrice += parseFloat(checkbox.dataset.price); // Sử dụng thuộc tính data-price
+          }
+        });
+        totalPriceDisplay.textContent = 'Tổng giá tiền: ' + Math.round(totalPrice) + ' VND'; // Thêm đơn vị tiền tệ
+      });
+    });
+
+    var bookingForm = document.getElementById('bookingForm');
+    bookingForm.addEventListener('submit', function (event) {
+      var selectedCheckboxes = document.querySelectorAll('.ticket-checkbox:checked');
+      if (selectedCheckboxes.length === 0) {
+        alert('Vui lòng chọn ít nhất một vé.');
+        event.preventDefault(); // Dừng form khỏi việc submit nếu không có vé nào được chọn
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <h2>Xin chào, Customer <span th:text="${session.user.getHoTen()}">User</span>!</h2>
+      <div class="mt-4">
+        <button class="btn btn-primary btn-lg mb-3" onclick="location.href='/movie/all'">Đặt mua vé online</button>
+        <button class="btn btn-primary btn-lg mb-3" onclick="location.href='/buy-tickets'">Xem lịch sử đặt mua vé</button>
+        <button class="btn btn-primary btn-lg mb-3" onclick="location.href='/profile'">Xem Thông Tin Cá Nhân</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
